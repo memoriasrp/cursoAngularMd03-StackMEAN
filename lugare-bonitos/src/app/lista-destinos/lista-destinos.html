@@ -21,6 +21,12 @@
                                 placeholder=" like...https://picsum.photos/id/2" #url>
                         </div>
                         <button type="submit" class="btn btn-primary" (click)="guardar(nombre, url)">Guardar!</button>
+                        @if (mensajeError) {
+                        <div class="alert alert-danger mt-2">
+                            {{ mensajeError }}
+                        </div>
+                        }
+
                     </form>
                 </div>
             </div>

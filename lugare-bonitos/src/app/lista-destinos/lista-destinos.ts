@@ -10,18 +10,29 @@ import { DestinoViajes } from '../models/destino-viaje.model';
 })
 export class ListaDestinos {
   destinos: DestinoViajes[];
+  mensajeError = '';
   constructor() {
     this.destinos = [];
   }
   guardar(nombreInput: HTMLInputElement, urlInput: HTMLInputElement): boolean {
     const nombre = nombreInput.value;
     const url = urlInput.value;
-    if (!nombre || !url) return false;
+    if (!nombre || !url) {
+      this.mensajeError = 'Falta completar todos los campos';
+
+      // borrar mensaje después de 3 segundos
+      setTimeout(() => {
+        this.mensajeError = '';
+      }, 3000);
+
+      return false;
+    }
+
+
 
     this.destinos.push(new DestinoViajes(nombre, url + "/380/230"));
     // limpiar inputs
     nombreInput.value = '';
-    urlInput.value = '';
 
     return false;
   }
