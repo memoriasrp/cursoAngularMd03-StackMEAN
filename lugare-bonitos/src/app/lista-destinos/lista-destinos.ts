@@ -13,9 +13,16 @@ export class ListaDestinos {
   constructor() {
     this.destinos = [];
   }
-  guardar(n: string, u: string): boolean {
-    this.destinos.push(new DestinoViajes(n, u));
-    console.log(this.destinos.length)
+  guardar(nombreInput: HTMLInputElement, urlInput: HTMLInputElement): boolean {
+    const nombre = nombreInput.value;
+    const url = urlInput.value;
+    if (!nombre || !url) return false;
+
+    this.destinos.push(new DestinoViajes(nombre, url + "/380/230"));
+    // limpiar inputs
+    nombreInput.value = '';
+    urlInput.value = '';
+
     return false;
   }
 }

@@ -17,10 +17,10 @@
                         </div>
                         <div class="form-group">
                             <label for="imagenUrl">Imagen Url</label>
-                            <input type="text" class="form-control" id="imagenUrl" placeholder="Ingresar url..." #url>
+                            <input type="text" class="form-control" id="imagenUrl" value="https://picsum.photos/id/2"
+                                placeholder=" like...https://picsum.photos/id/2" #url>
                         </div>
-                        <button type="submit" class="btn btn-primary"
-                            (click)="guardar(nombre.value, url.value)">Guardar!</button>
+                        <button type="submit" class="btn btn-primary" (click)="guardar(nombre, url)">Guardar!</button>
                     </form>
                 </div>
             </div>
