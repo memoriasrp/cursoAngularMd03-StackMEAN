@@ -21,10 +21,11 @@
     <h1>{{ title() }}</h1>
   </div>
 
-  <router-outlet>
-
-  </router-outlet>
+  <router-outlet> </router-outlet>
 </div>
+<hr class="mb-5">
+Fecha: {{ time | async }}
+
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
@@ -32,6 +33,3 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
-<router-outlet />
