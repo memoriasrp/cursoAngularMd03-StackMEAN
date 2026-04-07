@@ -23,6 +23,11 @@
             }
 
         </ul>
+        <div>
+            <a href="#" (click)="voteUp()"><i class="material-icons">thumb_up</i></a>
+            <a href="#" (click)="voteDown()"><i class="material-icons">thumb_down</i></a>
+            <span class="vote-count">{{ destino.votos }}</span>
+        </div>
         <button class="btn-card" (click)="ir()">Ir!</button>
         <button class="btn-card btn-delete" (click)="eliminar()">
             <span class="material-icons">delete</span>

@@ -27,3 +27,27 @@
     transform: scale(1.2);
     color: #e74c3c;
 }
+
+.votes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+}
+
+.votes a {
+    color: #555;
+    font-size: 22px;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.votes a:hover {
+    transform: scale(1.2);
+    color: #1976d2;
+}
+
+.vote-count {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+}

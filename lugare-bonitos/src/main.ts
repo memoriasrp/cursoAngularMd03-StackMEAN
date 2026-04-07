@@ -7,6 +7,10 @@ import { routes } from './app/app.routes';
 // NgRx
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { isDevMode } from '@angular/core';
+
+
 
 // Tu reducer y effects
 import { reducerDestinosViajes } from './app/store/destinos/destinos.reducer';
@@ -26,7 +30,13 @@ bootstrapApplication(App, {
 
     provideEffects([
       DestinosViajesEffects
-    ])
+    ]),
+     // NgRx DevTools 
+    provideStoreDevtools({
+      maxAge: 25,
+      logOnly: !isDevMode(),
+    })
+
 
   ]
 }).catch((err) => console.error(err));

@@ -17,9 +17,10 @@
     <hr class="mb-5">
 
     <div class="row row-flex">
-        @for (d of destinos; track d; let i=$index) {
-        <app-destino-viaje [destino]="d" [position]="i+1" (clicked)="elegido($event)"
-            (onEliminar)="eliminarDestino($event)"></app-destino-viaje>
+        @for (d of destinos$ | async; track d; let i = $index) {
+        <app-destino-viaje [destino]="d" [position]="i + 1" (onItemDeleted)="eliminarDestino($event)">
+        </app-destino-viaje>
+
         }
 
     </div>

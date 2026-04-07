@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map } from 'rxjs/operators';
 import {
-    NuevoDestinoAction,
-    ElegidoFavoritoAction,
-    DestinosViajesActionTypes
+    nuevoDestino,
+    elegidoFavorito,
+    eliminarDestino
 } from './destinos.actions';
 
 @Injectable()
@@ -15,8 +15,8 @@ export class DestinosViajesEffects {
     constructor(private actions$: Actions) {
         this.nuevoAgregado$ = createEffect(() =>
             this.actions$.pipe(
-                ofType<NuevoDestinoAction>(DestinosViajesActionTypes.NUEVO_DESTINO),
-                map(action => new ElegidoFavoritoAction(action.destino))
+                ofType(nuevoDestino),
+               map(action => elegidoFavorito({ destino: action.destino }))
             )
         );
     }

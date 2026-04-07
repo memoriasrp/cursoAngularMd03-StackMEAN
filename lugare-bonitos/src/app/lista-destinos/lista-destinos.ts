@@ -1,58 +1,46 @@
-import { Component, EventEmitter, output, Output } from '@angular/core';
-import { DestinoViaje } from '../destino-viaje/destino-viaje';
-import { DestinoViajes } from '../models/destino-viaje.model';
-import { FormDestinoViaje } from '../form-destino-viaje/form-destino-viaje';
-import { DestinosApiClient } from '../models/destinos-api-client.model';
-import { DestinosViajesState } from '../store/destinos/destinos.state'
-
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ElegidoFavoritoAction, NuevoDestinoAction, EliminarDestinoAction } from '../store/destinos/destinos.actions';
-//import {AppState} from '../app.module';
+import { Observable } from 'rxjs';
+import { DestinoViajes } from '../models/destino-viaje.model';
+import { nuevoDestino, elegidoFavorito, eliminarDestino } from '../store/destinos/destinos.actions';
+import { DestinosViajesState } from '../store/destinos/destinos.state';
+import { AsyncPipe } from '@angular/common';
+import { FormDestinoViaje } from '../form-destino-viaje/form-destino-viaje';
+import { DestinoViaje } from '../destino-viaje/destino-viaje';
 @Component({
   selector: 'app-lista-destinos',
-  imports: [DestinoViaje, FormDestinoViaje],
+  imports: [FormDestinoViaje, DestinoViaje, AsyncPipe],
   templateUrl: './lista-destinos.html',
   styleUrl: './lista-destinos.css',
 })
 export class ListaDestinos {
-  @Output() onItemAdded: EventEmitter<DestinoViajes>;
-  update: string[];
-  constructor(private destinoApiClient: DestinosApiClient, private store: Store<{ destinos: DestinosViajesState }>
-  ) {
-    this.onItemAdded = new EventEmitter();
-    this.update = [];
-    this.store.select(state => state.destinos.favorito).
-      subscribe(d => {
-        if (d != null) {
-          this.update.push('Se eligio a' + d.nombre);
+
+  destinos$!: Observable<DestinoViajes[]>;
+
+  update: string[] = [];
+
+  constructor(private store: Store<{ destinos: DestinosViajesState }>) {
+    this.destinos$ = this.store.select(state => state.destinos.items);
+
+    this.store.select(state => state.destinos.favorito)
+      .subscribe(d => {
+        if (d) {
+          this.update.push('Se eligió a ' + d.nombre);
         }
-      })
-
+      });
   }
-  agregado(d: DestinoViajes) {
-    this.destinoApiClient.add(d);
-    this.onItemAdded.emit(d);
-    this.store.dispatch(new NuevoDestinoAction(d));
-    this.update.push('Se agregó ' + d.nombre);
 
+  agregado(d: DestinoViajes) {
+    this.store.dispatch(nuevoDestino({ destino: d }));
+    this.update.push('Se agregó ' + d.nombre);
   }
 
   elegido(d: DestinoViajes) {
-    this.destinoApiClient.elegir(d);
-    this.store.dispatch(new ElegidoFavoritoAction(d));
+    this.store.dispatch(elegidoFavorito({ destino: d }));
   }
 
-  get destinos() {
-    return this.destinoApiClient.destinos;
+  eliminarDestino(d: DestinoViajes) {
+    this.store.dispatch(eliminarDestino({ destino: d }));
+    this.update.push('Se eliminó ' + d.nombre);
   }
-eliminarDestino(d: DestinoViajes) {
-  // 1. Eliminar del API client
-  this.destinoApiClient.eliminar(d);
-
-  // 2 también puedes despachar una acción NgRx
-   this.store.dispatch(new EliminarDestinoAction(d));
-   this.update.push('Se eliminó ' + d.nombre);
-
-}
-
 }

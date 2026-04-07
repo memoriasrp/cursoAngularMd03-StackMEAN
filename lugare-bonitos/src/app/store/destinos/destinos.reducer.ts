@@ -1,46 +1,68 @@
-import { DestinosViajesState, initializeDestinosViajesState } from './destinos.state';
-import {
-    DestinosViajesActionTypes,
-    NuevoDestinoAction,
-    ElegidoFavoritoAction,
-    EliminarDestinoAction
-} from './destinos.actions';
-import { Action } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
+import { nuevoDestino, elegidoFavorito, eliminarDestino, votarUp, votarDown } from './destinos.actions';
 import { DestinoViajes } from '../../models/destino-viaje.model';
+import { DestinosViajesState, initializeDestinosViajesState } from './destinos.state';
 
-export function reducerDestinosViajes(
-    state: DestinosViajesState = initializeDestinosViajesState(),
-    action: Action
-): DestinosViajesState {
-    switch (action.type) {
-        case DestinosViajesActionTypes.NUEVO_DESTINO:
-            const nuevo = action as NuevoDestinoAction;
-            return {
-                ...state,
-                items: [...state.items, nuevo.destino]
-            };
-        case DestinosViajesActionTypes.ELEGIDO_FAVORITO:
-        const fav = action as ElegidoFavoritoAction;
+export const initialState: DestinosViajesState = initializeDestinosViajesState();
 
-        return {
-            ...state,
-            items: state.items.map(x => {
-            const nuevo = new DestinoViajes(x.nombre, x.imagenUrl);
-            nuevo.setSelected(x === fav.destino);
-            return nuevo;
-            }),
-            favorito: fav.destino
-        };
-        case DestinosViajesActionTypes.ELIMINAR_DESTINO:
-            const eliminar = action as EliminarDestinoAction;
-            return {
-                ...state,
-                items: state.items.filter(x => x !== eliminar.destino),
-                favorito: state.favorito === eliminar.destino ? null : state.favorito
+export const reducerDestinosViajes = createReducer(
+  initialState,
 
-            };
+  // NUEVO DESTINO
+  on(nuevoDestino, (state, { destino }) => ({
+    ...state,
+    items: [...state.items, destino]
+  })),
 
-        default:
-            return state;
-    }
-}
+  // ELEGIDO FAVORITO
+  on(elegidoFavorito, (state, { destino }) => ({
+    ...state,
+    items: state.items.map(x => {
+      const nuevo = new DestinoViajes(x.nombre, x.imagenUrl);
+      nuevo.setSelected(x === destino);
+      nuevo.votos = x.votos ?? 0;
+      return nuevo;
+    }),
+    favorito: destino
+  })),
+
+  // ELIMINAR DESTINO
+  on(eliminarDestino, (state, { destino }) => ({
+    ...state,
+    items: state.items.filter(x => x !== destino),
+    favorito: state.favorito === destino ? null : state.favorito
+  })),
+
+  // VOTAR UP
+        on(votarUp, (state, { destino }) => ({
+        ...state,
+        items: state.items.map(d =>
+            d.nombre === destino.nombre
+            ? new DestinoViajes(
+                d.nombre,
+                d.imagenUrl,
+                d.servicios,
+                (d.votos ?? 0) + 1,
+                d.selected
+                )
+            : d
+        )
+        })),
+
+// VOTAR DOWN
+        on(votarDown, (state, { destino }) => ({
+        ...state,
+        items: state.items.map(d =>
+            d.nombre === destino.nombre
+            ? new DestinoViajes(
+                d.nombre,
+                d.imagenUrl,
+                d.servicios,
+                Math.max((d.votos ?? 0) - 1, 0),
+                d.selected
+                )
+            : d
+        )
+        })),
+
+);

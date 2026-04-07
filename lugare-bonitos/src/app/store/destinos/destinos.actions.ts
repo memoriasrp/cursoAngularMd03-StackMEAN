@@ -1,28 +1,27 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import { DestinoViajes } from '../../models/destino-viaje.model';
 
-export enum DestinosViajesActionTypes {
-    NUEVO_DESTINO = '[Destinos Viajes] Nuevo',
-    ELEGIDO_FAVORITO = '[Destinos Viajes] Favorito',
-    ELIMINAR_DESTINO = '[Destinos Viajes] Eliminar'
-}
+export const nuevoDestino = createAction(
+  '[Destinos Viajes] Nuevo',
+  props<{ destino: DestinoViajes }>()
+);
 
-export class NuevoDestinoAction implements Action {
-    readonly type = DestinosViajesActionTypes.NUEVO_DESTINO;
-    constructor(public destino: DestinoViajes) { }
-}
+export const elegidoFavorito = createAction(
+  '[Destinos Viajes] Favorito',
+  props<{ destino: DestinoViajes }>()
+);
 
-export class ElegidoFavoritoAction implements Action {
-    readonly type = DestinosViajesActionTypes.ELEGIDO_FAVORITO;
-    constructor(public destino: DestinoViajes) { }
-}
+export const eliminarDestino = createAction(
+  '[Destinos Viajes] Eliminar',
+  props<{ destino: DestinoViajes }>()
+);
 
-export class EliminarDestinoAction implements Action {
-  readonly type = DestinosViajesActionTypes.ELIMINAR_DESTINO;
-  constructor(public destino: DestinoViajes) {}
-}
+export const votarUp = createAction(
+  '[Destinos Viajes] Votar Up',
+  props<{ destino: DestinoViajes }>()
+);
 
-export type DestinosViajesActions =
-    | NuevoDestinoAction
-    | ElegidoFavoritoAction
-    | EliminarDestinoAction;
+export const votarDown = createAction(
+  '[Destinos Viajes] Votar Down',
+  props<{ destino: DestinoViajes }>()
+);
