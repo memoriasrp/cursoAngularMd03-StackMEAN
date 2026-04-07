@@ -3,6 +3,11 @@ import { DestinoViaje } from '../destino-viaje/destino-viaje';
 import { DestinoViajes } from '../models/destino-viaje.model';
 import { FormDestinoViaje } from '../form-destino-viaje/form-destino-viaje';
 import { DestinosApiClient } from '../models/destinos-api-client.model';
+import { DestinosViajesState } from '../store/destinos/destinos.state'
+
+import { Store } from '@ngrx/store';
+import { ElegidoFavoritoAction, NuevoDestinoAction } from '../store/destinos/destinos.actions';
+//import {AppState} from '../app.module';
 @Component({
   selector: 'app-lista-destinos',
   imports: [DestinoViaje, FormDestinoViaje],
@@ -12,28 +17,27 @@ import { DestinosApiClient } from '../models/destinos-api-client.model';
 export class ListaDestinos {
   @Output() onItemAdded: EventEmitter<DestinoViajes>;
   update: string[];
-  constructor(private destinoApiClient: DestinosApiClient) {
+  constructor(private destinoApiClient: DestinosApiClient, private store: Store<{ destinos: DestinosViajesState }>
+  ) {
     this.onItemAdded = new EventEmitter();
     this.update = [];
-    this.destinoApiClient.subscribeOnChange((d: DestinoViajes) => {
-      if (d != null) {
-        this.update.push('Se eligio a' + d.nombre);
-      }
-    });
+    this.store.select(state => state.destinos.favorito).
+      subscribe(d => {
+        if (d != null) {
+          this.update.push('Se eligio a' + d.nombre);
+        }
+      })
+
   }
   agregado(d: DestinoViajes) {
-    //this.destinos.push(d);
     this.destinoApiClient.add(d);
     this.onItemAdded.emit(d);
+    this.store.dispatch(new NuevoDestinoAction(d));
   }
 
   elegido(d: DestinoViajes) {
-    /* 
-    this.destinos.forEach(function (x) { x.setSelected(false); })
-    d.setSelected(true);
-    */
     this.destinoApiClient.elegir(d);
-
+    this.store.dispatch(new ElegidoFavoritoAction(d));
   }
 
   get destinos() {

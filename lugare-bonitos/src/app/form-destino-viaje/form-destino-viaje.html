@@ -3,6 +3,12 @@
         <label for="nombre">Nombre</label>
         <input type="text" class="form-control" id="nombre" placeholder="Ingresar nombre..." formControlName="nombre"
             [class.is-invalid]="fg.get('nombre')?.invalid && fg.get('nombre')?.touched">
+        <ul>
+            @for (r of searchResults; track r;) {
+            <li>{{r}}</li>
+            }
+
+        </ul>
         @if (fg.get('nombre')?.hasError('required') && fg.get('nombre')?.touched) {
         <small class="text-danger d-block">
             el nombre es obligatoria

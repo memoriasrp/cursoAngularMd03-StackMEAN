@@ -1,6 +1,8 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { DestinoViajes } from '../models/destino-viaje.model';
+import { debounceTime, distinctUntilChanged, fromEvent, map, switchMap, filter } from 'rxjs';
+import { ajax, AjaxResponse } from 'rxjs/ajax';
 
 @Component({
   selector: 'app-form-destino-viaje',
@@ -13,6 +15,7 @@ export class FormDestinoViaje {
   fg: FormGroup;
   mensajeError = '';
   minLongitud = 5;
+  searchResults: string[];
 
   constructor(fb: FormBuilder) {
     this.onItemAdded = new EventEmitter();
@@ -20,11 +23,25 @@ export class FormDestinoViaje {
       nombre: ['', [Validators.required, this.validarNombre.bind(this)]],
       url: ['', [Validators.required, this.validarUrl.bind(this)]]
     });
-
+    this.searchResults = [];
     // es un ejemplo que registrar todos los cambios que se realizan en el formulario
     //this.fg.valueChanges.subscribe((form: any) => { console.log('this->' + form) });
   }
+  ngOnInit() {
+    this.fg.get('nombre')!.valueChanges
+      .pipe(
+        map(value => value ?? ''), // evita null
+        filter((text: string) => text.length > 4),
+        debounceTime(200),
+        distinctUntilChanged(),
+        switchMap(() => ajax<string[]>('/assets/datos.json'))
+      )
+      .subscribe((response: AjaxResponse<string[]>) => {
+        this.searchResults = response.response;
+      });
 
+
+  }
   guardar(): boolean {
     if (this.fg.invalid) {
       this.mensajeError = 'Falta completar todos los campos';

@@ -4,10 +4,29 @@ import { App } from './app/app';
 import { provideRouter } from '@angular/router';
 import { routes } from './app/app.routes';
 
+// NgRx
+import { provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
+
+// Tu reducer y effects
+import { reducerDestinosViajes } from './app/store/destinos/destinos.reducer';
+import { DestinosViajesEffects } from './app/store/destinos/destinos.effects';
+
+
+
 bootstrapApplication(App, {
   ...appConfig,
   providers: [
     ...(appConfig.providers ?? []),
-    provideRouter(routes)
+    provideRouter(routes),
+    // Aquí integras NgRx
+    provideStore({
+      destinos: reducerDestinosViajes
+    }),
+
+    provideEffects([
+      DestinosViajesEffects
+    ])
+
   ]
 }).catch((err) => console.error(err));
