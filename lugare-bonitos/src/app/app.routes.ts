@@ -30,7 +30,7 @@ export const routes: Routes = [
             { path: '', redirectTo: 'main', pathMatch: 'full' }, // Ruta por defecto para /vuelos
             { path: 'main', component: VuelosMainComponent },
             { path: 'mas-info', component: VuelosMasInfoComponent },
-            { path: 'id', component: VuelosDetallesComponent },
+            { path: 'id/:id', component: VuelosDetallesComponent },
         ]
     }
 
