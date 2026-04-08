@@ -1,11 +1,25 @@
 import { Routes } from '@angular/router';
-import { ListaDestinos } from './lista-destinos/lista-destinos';
-import { DestinoViaje } from './destino-viaje/destino-viaje';
-import { DestinoDetalle } from './destino-detalle/destino-detalle';
+import { ListaDestinos } from './components/lista-destinos/lista-destinos';
+import { DestinoDetalle } from './components/destino-detalle/destino-detalle';
+import { Login } from './components/login/login/login';
 
+import { usuarioLogueadoGuard } from './guards/usuario-logueado/usuario-logueado-guard';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: 'home', component: ListaDestinos },
-    { path: 'destino', component: DestinoDetalle }
+    // Ruta por defecto: redirige al login si no hay nada
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+    // Ruta de Login (pública)
+    { path: 'login', component: Login },
+
+    // Ruta de Home (pública o protegida, según decidas)
+    { path: 'home', component: ListaDestinos, canActivate: [usuarioLogueadoGuard] },
+
+    // Ruta Protegida: Solo entran si el Guard devuelve true
+    {
+        path: 'destino',
+        component: DestinoDetalle,
+        canActivate: [usuarioLogueadoGuard]
+    }
+
 ];

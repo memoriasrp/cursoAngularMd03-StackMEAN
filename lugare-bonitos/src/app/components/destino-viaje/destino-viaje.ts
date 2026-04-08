@@ -2,14 +2,14 @@ import { Component, HostBinding, Input, Output, EventEmitter } from '@angular/co
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { DestinoViajes } from '../models/destino-viaje.model';
+import { DestinoViajes } from '../../models/destino-viaje.model';
 import {
   votarUp,
   votarDown,
   elegidoFavorito,
   eliminarDestino,
   resetVote
-} from '../store/destinos/destinos.actions';
+} from '../../store/destinos/destinos.actions';
 
 @Component({
   selector: 'app-destino-viaje',

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { DestinoViajes } from '../models/destino-viaje.model';
-import { nuevoDestino, elegidoFavorito, eliminarDestino } from '../store/destinos/destinos.actions';
-import { DestinosViajesState } from '../store/destinos/destinos.state';
+import { DestinoViajes } from '../../models/destino-viaje.model';
+import { nuevoDestino, elegidoFavorito, eliminarDestino } from '../../store/destinos/destinos.actions';
+import { DestinosViajesState } from '../../store/destinos/destinos.state';
 import { AsyncPipe } from '@angular/common';
 import { FormDestinoViaje } from '../form-destino-viaje/form-destino-viaje';
 import { DestinoViaje } from '../destino-viaje/destino-viaje';

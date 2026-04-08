@@ -1,0 +1,37 @@
+<div class="login-card">
+    @if (isLoggedIn()){
+    <div class="welcome-container">
+        <h2>¡Ya has iniciado sesión!</h2>
+        <p>Ya puedes acceder a tus destinos protegidos.</p>
+
+        <div class="actions">
+            <button class="btn-primary" (click)="goToDestinos()">
+                Ir a Destinos
+            </button>
+
+            <button class="btn-outline" (click)="logout()">
+                Cerrar Sesión (Log Out)
+            </button>
+        </div>
+    </div>
+    } @else {
+    <h2>Acceso al Sistema</h2>
+    <form (submit)="onLogin($event)">
+        <div class="form-group">
+            <label>Correo Electrónico</label>
+            <input type="email" name="email" [(ngModel)]="email" required>
+        </div>
+
+        <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" name="password" [(ngModel)]="password" required>
+        </div>
+
+        @if (errorMessage()) {
+        <div class="error-message">{{ errorMessage() }}</div>
+        }
+
+        <button type="submit" class="btn-login">Iniciar Sesión</button>
+    </form>
+    }
+</div>

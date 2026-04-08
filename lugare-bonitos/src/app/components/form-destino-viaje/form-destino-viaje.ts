@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { DestinoViajes } from '../models/destino-viaje.model';
+import { DestinoViajes } from '../../models/destino-viaje.model';
 import { debounceTime, distinctUntilChanged, fromEvent, map, switchMap, filter } from 'rxjs';
 import { ajax, AjaxResponse } from 'rxjs/ajax';
 
