@@ -1,0 +1,28 @@
+.navLinks {
+    display: flex;
+    align-items: center;
+    /* Alinea verticalmente al centro */
+    justify-content: space-between;
+    /* Links a la izquierda, Logout a la derecha */
+    padding: 1rem 0;
+    gap: 20px;
+    /* Espacio de seguridad */
+}
+
+.links-group {
+    display: flex;
+    gap: 30px;
+    /* <--- ESTO separa Home de Destino */
+}
+
+.navLinks a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.navLinks a:hover {
+    color: #dd0031;
+    /* Rojo Angular */
+}
