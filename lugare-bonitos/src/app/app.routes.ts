@@ -6,6 +6,9 @@ import { VuelosComponent } from './components/vuelos/vuelos-component/vuelos-com
 import { VuelosDetallesComponent } from './components/vuelos/vuelos-detalles-component/vuelos-detalles-component';
 import { VuelosMainComponent } from './components/vuelos/vuelos-main-component/vuelos-main-component';
 import { VuelosMasInfoComponent } from './components/vuelos/vuelos-mas-info-component/vuelos-mas-info-component';
+import { ReservasListado } from './components/reservas/reservas-listado/reservas-listado';
+import { ReservasDetalle } from './components/reservas/reservas-detalle/reservas-detalle';
+
 import { usuarioLogueadoGuard } from './guards/usuario-logueado/usuario-logueado-guard';
 
 export const routes: Routes = [
@@ -31,6 +34,14 @@ export const routes: Routes = [
             { path: 'main', component: VuelosMainComponent },
             { path: 'mas-info', component: VuelosMasInfoComponent },
             { path: 'id/:id', component: VuelosDetallesComponent },
+        ]
+    },
+    {
+        path: 'reservas',
+        canActivate: [usuarioLogueadoGuard],
+        children: [
+            { path: '', component: ReservasListado },
+            { path: ':id', component: ReservasDetalle }
         ]
     }
 

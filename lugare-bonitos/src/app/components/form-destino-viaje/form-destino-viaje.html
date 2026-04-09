@@ -5,7 +5,9 @@
             [class.is-invalid]="fg.get('nombre')?.invalid && fg.get('nombre')?.touched">
         <ul>
             @for (r of searchResults; track r;) {
-            <li>{{r}}</li>
+            <li (click)="fg.get('nombre')?.setValue(r); searchResults = []">
+                {{ r }}
+            </li>
             }
 
         </ul>

@@ -21,6 +21,8 @@
         <app-destino-viaje [destino]="d" [position]="i + 1" (onItemDeleted)="eliminarDestino($event)">
         </app-destino-viaje>
 
+        }@empty {
+        <p>No hay destinos guardados en el navegador.</p>
         }
 
     </div>

@@ -1,0 +1,36 @@
+<div class="container">
+    <h2>Mis Reservas</h2>
+    <p>reservas-listado works!</p>
+    <a [routerLink]="['./',10]">Ver Detalle de Reserva 123</a>
+    <a [routerLink]="['/login']">Ir a Login</a>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Destino</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (reserva of misReservas; track reserva.id) {
+                <tr>
+                    <td>{{ reserva.id }}</td>
+                    <td>{{ reserva.nombreDestino }}</td>
+                    <td>{{ reserva.fecha | date:'dd/MM/yyyy' }}</td>
+                    <td>
+                        <button class="btn-detalle" [routerLink]="['./', reserva.id]">
+                            Ver Detalle
+                        </button>
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="4">No tienes reservas registradas actualmente.</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
