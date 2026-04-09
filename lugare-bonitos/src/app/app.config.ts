@@ -24,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: RESERVAS_API_CONFIG,
-      useValue: { baseUrl: 'http://localhost:3000', timeout: 5000 }
+      useValue: { baseUrl: 'http://localhost:3000/api', timeout: 5000 }
     },
     {
       provide: DestinosApiClient,        // La base
