@@ -4,7 +4,7 @@ import { DestinoViajes } from '../../models/destino-viaje.model';
 import { debounceTime, distinctUntilChanged, fromEvent, map, switchMap, filter } from 'rxjs';
 import { ajax, AjaxResponse } from 'rxjs/ajax';
 import { DestinosApiClient } from '../../models/destinos-api-client.model';
-
+import { RESERVAS_API_CONFIG } from '../../core/tokens/app-config.token';
 @Component({
   selector: 'app-form-destino-viaje',
   imports: [ReactiveFormsModule],
@@ -12,6 +12,8 @@ import { DestinosApiClient } from '../../models/destinos-api-client.model';
   styleUrl: './form-destino-viaje.css',
 })
 export class FormDestinoViaje {
+  // Inyectamos la configuración que definiste en appConfig
+  private config = inject(RESERVAS_API_CONFIG);
   // 1. Inicializas el EventEmitter aquí mismo
   @Output() onItemAdded = new EventEmitter<DestinoViajes>();
 
@@ -22,7 +24,7 @@ export class FormDestinoViaje {
     url: ['', [Validators.required, this.validarUrl.bind(this)]]
   });
   mensajeError = '';
-  minLongitud = 5;
+  minLongitud = 3;
   searchResults: string[] = [];
 
   ngOnInit() {
@@ -32,12 +34,22 @@ export class FormDestinoViaje {
         filter(text => text.length >= this.minLongitud),
         debounceTime(300),
         distinctUntilChanged(),
-        // Buscamos el JSON y filtramos por el nombre ingresado
-        switchMap((text) => ajax<string[]>('/assets/datos.json').pipe(
-          map(res => res.response.filter(item => item.toLowerCase().includes(text.toLowerCase())))
-        ))
+        // 1. Cambiamos la URL a la de tu servidor Express
+        // 2. Usamos la ruta que configuraste: /api/paises
+        switchMap((text) => {
+          // Usamos la URL del config de forma dinámica
+          const url = `${this.config.baseUrl}/paises`;
+          return ajax<string[]>(url).pipe(
+            map(res => res.response.filter(item =>
+              item.toLowerCase().includes(text.toLowerCase())
+            ))
+          );
+        })
       )
-      .subscribe(res => this.searchResults = res);
+      .subscribe(res => {
+        this.searchResults = res;
+        console.log('Resultados desde el servidor:', res);
+      });
   }
   guardar(): boolean {
     if (this.fg.invalid) {

@@ -16,7 +16,7 @@ export class DestinosViajesEffects {
         this.nuevoAgregado$ = createEffect(() =>
             this.actions$.pipe(
                 ofType(nuevoDestino),
-               map(action => elegidoFavorito({ destino: action.destino }))
+                map(action => elegidoFavorito({ destino: action.destino }))
             )
         );
     }

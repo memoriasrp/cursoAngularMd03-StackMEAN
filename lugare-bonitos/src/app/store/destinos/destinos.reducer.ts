@@ -14,13 +14,13 @@ export const reducerDestinosViajes = createReducer(
     items: [...state.items, destino]
   })),
 
-  // ELEGIDO FAVORITO
+  // ELEGIDO FAVORITO (Corregido para no perder votos)
   on(elegidoFavorito, (state, { destino }) => ({
     ...state,
     items: state.items.map(x => {
-      const nuevo = new DestinoViajes(x.nombre, x.imagenUrl);
-      nuevo.setSelected(x === destino);
-      nuevo.votos = x.votos ?? 0;
+      // IMPORTANTE: Pasamos los votos actuales para no resetearlos a 0
+      const nuevo = new DestinoViajes(x.nombre, x.imagenUrl, x.votos);
+      nuevo.setSelected(x.nombre === destino.nombre);
       return nuevo;
     }),
     favorito: destino
@@ -41,14 +41,13 @@ export const reducerDestinosViajes = createReducer(
         ? new DestinoViajes(
           d.nombre,
           d.imagenUrl,
-          d.servicios,
-          (d.votos ?? 0) + 1,
-          d.selected
+          (d.votos ?? 0) + 1, // Ahora es el 3er argumento
+          d.servicios,        // 4to
+          d.selected          // 5to
         )
         : d
     )
   })),
-
   // VOTAR DOWN
   on(votarDown, (state, { destino }) => ({
     ...state,
@@ -57,8 +56,8 @@ export const reducerDestinosViajes = createReducer(
         ? new DestinoViajes(
           d.nombre,
           d.imagenUrl,
-          d.servicios,
           Math.max((d.votos ?? 0) - 1, 0),
+          d.servicios,
           d.selected
         )
         : d
@@ -72,8 +71,8 @@ export const reducerDestinosViajes = createReducer(
         ? new DestinoViajes(
           d.nombre,
           d.imagenUrl,
-          d.servicios,
           0,
+          d.servicios,
           d.selected
         )
         : d

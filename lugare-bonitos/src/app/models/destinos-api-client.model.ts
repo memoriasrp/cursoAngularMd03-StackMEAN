@@ -1,4 +1,4 @@
-import { BehaviorSubject, Subject } from "rxjs";
+import { BehaviorSubject, Subject, Observable, of } from "rxjs";
 import { DestinoViajes } from "./destino-viaje.model";
 import { Injectable } from "@angular/core";
 
@@ -7,33 +7,18 @@ import { Injectable } from "@angular/core";
 })
 
 export class DestinosApiClient {
-    destinos: DestinoViajes[];
+    destinos: DestinoViajes[] = [];
     current: BehaviorSubject<DestinoViajes | null> = new BehaviorSubject<DestinoViajes | null>(null);
     constructor() {
-        this.destinos = [];
-        // 1. Intentamos recuperar el string del navegador
-        const db = localStorage.getItem('destinos');
-        // 2. Si existe algo guardado, lo procesamos
-        if (db) {
-            const objetosPlanos = JSON.parse(db); // Convertimos el texto en un array de objetos
 
-            // 3. ¡IMPORTANTE! Debemos convertirlos de nuevo a instancias de DestinoViajes
-            // para que tengan sus métodos (como setSelected, etc.)
-            this.destinos = objetosPlanos.map((d: any) => {
-                const nuevo = new DestinoViajes(d.nombre, d.imagenUrl);
-                if (d.selected) nuevo.setSelected(true); // Si guardas el estado de selección
-                return nuevo;
-            });
-        }
-        console.log("destinos cargados", this.destinos);
     }
 
     add(d: DestinoViajes) {
         this.destinos.push(d);
     }
 
-    getAll(): DestinoViajes[] {
-        return this.destinos;
+    getAll(): Observable<DestinoViajes[]> {
+        return of(this.destinos); // 'of' envuelve el array en un Observable
     }
 
     getById(id: string): DestinoViajes {
@@ -57,6 +42,11 @@ export class DestinosApiClient {
 
     subscribeOnChange(fn: any) {
         this.current.subscribe(fn);
+    }
+
+    // 1. Declaramos el método aquí para que sea visible en toda la app
+    actualizarVotos(d: DestinoViajes, votosManuales?: number): void {
+        // Se deja vacío o con un log básico
     }
 
 }

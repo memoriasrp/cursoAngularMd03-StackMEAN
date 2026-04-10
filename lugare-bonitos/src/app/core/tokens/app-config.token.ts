@@ -8,8 +8,6 @@ export interface GlobalConfig {
     retryAttempts: number;
 }
 
-// 2. Creamos y exportamos el Token
-export const APP_CONFIG = new InjectionToken<GlobalConfig>('IdentificadorDeMiConfig');
 
 // Definimos una interfaz para tener autocompletado y evitar errores
 export interface ApiConfig {

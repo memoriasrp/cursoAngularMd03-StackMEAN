@@ -17,24 +17,28 @@ import { DestinosApiClient, ClonDelApi } from '../../models/destinos-api-client.
 export class ListaDestinos {
   private api = inject(DestinosApiClient);
   private apiAlias = inject(ClonDelApi) as DestinosApiClient; // Inyectamos el alias
-  destinos$: Observable<DestinoViajes[]> = of(this.api.getAll());
+  destinos$: Observable<DestinoViajes[]> = (this.api.getAll());
 
   update: string[] = [];
 
   constructor(private store: Store<{ destinos: DestinosViajesState }>) {
-    console.log('¿Son el mismo objeto?:', this.api === this.apiAlias);
-    // 1. Obtenemos lo que el servicio cargó del LocalStorage
-    const datosIniciales = this.api.getAll();
-    // 2. Si hay datos, se los enviamos al Store para que deje de estar vacío
-    if (datosIniciales.length > 0) {
-      datosIniciales.forEach(d => {
-        this.store.dispatch(nuevoDestino({ destino: d }));
-      });
-    }
+    // 1. Nos suscribimos al flujo de datos (ahora asíncrono desde Express)
+    this.api.getAll().subscribe((datos: DestinoViajes[]) => {
 
-    // 3. Ahora sí, nos suscribimos al Store (que ya tiene los datos)
+      // 2. Solo cuando los datos llegan del servidor, los mandamos al Store
+      if (datos && datos.length > 0) {
+        datos.forEach(d => {
+          // Importante: Si 'd' viene de la API como objeto plano, 
+          // podrías necesitar: d = new DestinoViajes(d.nombre, d.imagenUrl);
+          this.store.dispatch(nuevoDestino({ destino: d }));
+        });
+      }
+    });
+
+    // 3. Vinculamos el observable de la vista al Store
     this.destinos$ = this.store.select(state => state.destinos.items);
 
+    // Suscripción al favorito (se mantiene igual)
     this.store.select(state => state.destinos.favorito)
       .subscribe(d => {
         if (d) {
@@ -53,11 +57,11 @@ export class ListaDestinos {
   }
 
   eliminarDestino(d: DestinoViajes) {
-    // 1. Primero lo quitamos del LocalStorage a través del API
-    this.api.eliminar(d);
 
     // 2. Avisamos al Store para que lo quite de la pantalla
     this.store.dispatch(eliminarDestino({ destino: d }));
+    // 1. Primero lo quitamos del LocalStorage a través del API
+    this.api.eliminar(d);
 
     this.update.push('Se eliminó ' + d.nombre);
   }
