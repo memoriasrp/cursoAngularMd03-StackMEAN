@@ -1,0 +1,32 @@
+[
+  {
+    "nombre": "Alemania",
+    "imagenUrl": "https://picsum.photos/id/852/380/230",
+    "servicios": [
+      "pileta",
+      "desayuno"
+    ],
+    "selected": false,
+    "votos": 7
+  },
+  {
+    "nombre": "Chile",
+    "imagenUrl": "https://picsum.photos/id/1032/380/230",
+    "servicios": [
+      "pileta",
+      "desayuno"
+    ],
+    "selected": false,
+    "votos": 4
+  },
+  {
+    "nombre": "China",
+    "imagenUrl": "https://picsum.photos/id/1074/380/230",
+    "servicios": [
+      "pileta",
+      "desayuno"
+    ],
+    "selected": false,
+    "votos": 4
+  }
+]
